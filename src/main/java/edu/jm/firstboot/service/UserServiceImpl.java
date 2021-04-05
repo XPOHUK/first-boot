@@ -30,7 +30,11 @@ public class UserServiceImpl implements UserService {
    public void createUser(UserDto userDto) {
       if(validateUser(userDto).isEmpty()) {
          User user = new User(userDto);
-         user.setRoles(new HashSet<>(Arrays.asList(roleDao.getRoleByName("ROLE_USER"))));
+         if (userDto.getRoles() == null ) {
+            user.setRoles(new HashSet<>(Arrays.asList(roleDao.getRoleByName("ROLE_USER"))));
+         } else {
+            user.setRoles(userDto.getRoles());
+         }
          user.setPassword(passwordEncoder.encode(userDto.getPassword()));
          user.enable();
          user.setAccountNonExpired(true);
